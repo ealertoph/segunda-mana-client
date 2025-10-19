@@ -23,8 +23,10 @@ const OrderManagement = () => {
   const [search, setSearch] = useState("");
   const [viewData, setViewData] = useState(null);
   const [editData, setEditData] = useState(null);
-  const [deleteItem, setDeleteItem] = useState(null);
+  // const [deleteItem, setDeleteItem] = useState(null);
+  const [toggleItem, setToggleItem] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [filterStatus, setFilterStatus] = useState("all");
   const ordersPerPage = 10;
   const maxPageNumbers = 3;
   const navigate = useNavigate();
@@ -46,9 +48,12 @@ const OrderManagement = () => {
     const fetchOrders = async () => {
       try {
         const token = sessionStorage.getItem("sg_admin_token");
-        const res = await fetch(`${process.env.REACT_APP_API_URL_ADMIN}/orders`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await fetch(
+          `${process.env.REACT_APP_API_URL_ADMIN}/orders`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         const data = await res.json();
         setOrders(data);
       } catch (error) {
@@ -75,6 +80,9 @@ const OrderManagement = () => {
       .join(" ");
 
     const searchTerm = search.toLowerCase();
+
+    if (filterStatus === "active" && o.isArchived) return false;
+    if (filterStatus === "archived" && !o.isArchived) return false;
 
     return (
       orderId.includes(searchTerm) ||
@@ -144,27 +152,32 @@ const OrderManagement = () => {
 
   const handleView = (item) => setViewData(item);
   const handleEdit = (item) => setEditData(item);
-  const handleDelete = (item) => setDeleteItem(item);
+  const handleToggle = (item) => setToggleItem(item);
 
-  const confirmDelete = async (id) => {
+  const confirmToggleArchive = async (id, isArchived) => {
     try {
       const token = sessionStorage.getItem("sg_admin_token");
-      const res = await fetch(`${process.env.REACT_APP_API_URL_ADMIN}/orders/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL_ADMIN}/orders/${id}/archive?restore=${
+          isArchived ? "true" : "false"
+        }`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       const result = await res.json();
-      if (!res.ok) throw new Error(result.message || "Failed to delete order");
+      if (!res.ok) throw new Error(result.message || "Failed to Archive order");
 
-      alert("Order deleted successfully!");
+      alert("Order archived successfully!");
       setOrders((prev) => prev.filter((o) => o._id !== id));
-      setDeleteItem(null);
+      setToggleItem(null);
     } catch (err) {
       console.error(err);
-      alert(err.message || "Error deleting order");
+      alert(err.message || "Error archiving order");
     }
   };
 
@@ -346,7 +359,15 @@ const OrderManagement = () => {
                 onChange={(e) => setSearch(e.target.value)}
               />
             </div>
-            {/*<button className="btn">Filter</button>*/}
+            <select
+              className="btn"
+              value={filterStatus}
+              onChange={(e) => setFilterStatus(e.target.value)}
+            >
+              <option value="all">All</option>
+              <option value="active">Active</option>
+              <option value="archived">Archived</option>
+            </select>{" "}
             <button className="btn" onClick={exportCSV}>
               Export CSV
             </button>
@@ -403,7 +424,7 @@ const OrderManagement = () => {
                       <ActionButtons
                         onView={() => handleView(o)}
                         onEdit={() => handleEdit(o)}
-                        onDelete={() => handleDelete(o)}
+                        onDelete={() => handleToggle(o)}
                       />
                     </td>
                   </tr>
@@ -580,26 +601,36 @@ const OrderManagement = () => {
           )}
 
           {/* Delete Confirmation */}
-          {deleteItem && (
+          {toggleItem && (
             <div className="modal-overlay">
               <div className="modal-box max-w-md text-center">
-                <h2 className="text-lg font-semibold mb-3">Confirm Delete</h2>
+                <h2 className="text-lg font-semibold mb-3">
+                  Confirm {toggleItem.isArchived ? "Restore" : "Archive"}
+                </h2>
                 <p>
-                  Are you sure you want to delete order{" "}
-                  <strong>{deleteItem._id}</strong>?
+                  Are you sure you want to{" "}
+                  <strong>
+                    {toggleItem.isArchived ? "restore" : "archive"}
+                  </strong>{" "}
+                  (AR Ref: {toggleItem.arRef})?
                 </p>
                 <div className="flex justify-center gap-3 mt-6">
                   <button
                     className="btn border"
-                    onClick={() => setDeleteItem(null)}
+                    onClick={() => setToggleItem(null)}
                   >
                     Cancel
                   </button>
                   <button
                     className="btn danger"
-                    onClick={() => confirmDelete(deleteItem._id)}
+                    onClick={() =>
+                      confirmToggleArchive(
+                        toggleItem._id,
+                        toggleItem.isArchived
+                      )
+                    }
                   >
-                    Delete
+                    {toggleItem.isArchived ? "Restore" : "Archive"}
                   </button>
                 </div>
               </div>
