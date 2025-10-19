@@ -46,9 +46,12 @@ const OrderManagement = () => {
     const fetchOrders = async () => {
       try {
         const token = sessionStorage.getItem("sg_admin_token");
-        const res = await fetch(`${process.env.REACT_APP_API_URL_ADMIN}/orders`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await fetch(
+          `${process.env.REACT_APP_API_URL_ADMIN}/orders`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         const data = await res.json();
         setOrders(data);
       } catch (error) {
@@ -149,12 +152,15 @@ const OrderManagement = () => {
   const confirmDelete = async (id) => {
     try {
       const token = sessionStorage.getItem("sg_admin_token");
-      const res = await fetch(`${process.env.REACT_APP_API_URL_ADMIN}/orders/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL_ADMIN}/orders/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       const result = await res.json();
       if (!res.ok) throw new Error(result.message || "Failed to delete order");
@@ -403,6 +409,7 @@ const OrderManagement = () => {
                       <ActionButtons
                         onView={() => handleView(o)}
                         onEdit={() => handleEdit(o)}
+                        onDelete={() => handleDelete(o)}
                       />
                     </td>
                   </tr>
@@ -594,12 +601,12 @@ const OrderManagement = () => {
                   >
                     Cancel
                   </button>
-                  <button
+                  {/*<button
                     className="btn danger"
                     onClick={() => confirmDelete(deleteItem._id)}
                   >
                     Delete
-                  </button>
+                  </button>*/}
                 </div>
               </div>
             </div>
