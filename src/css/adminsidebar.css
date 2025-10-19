@@ -1,0 +1,156 @@
+/* --- Sidebar Base Styles --- */
+.admin-sidebar {
+  width: 240px;
+  background: linear-gradient(to bottom, #ffffff, #f9fafc);
+  color: #111827;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border-right: 1px solid #e5e7eb;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100; /* keeps sidebar above overlay */
+  transition: left 0.3s ease;
+}
+
+/* --- Brand / Logo --- */
+.admin-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 16px;
+  margin-bottom: 30px;
+  color: #111827;
+}
+
+.admin-logo {
+  background: #d32f2f;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+}
+
+.admin-brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+/* --- Navigation --- */
+.admin-nav {
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-section-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: #9ca3af;
+  margin: 15px 0 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.admin-nav a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.admin-nav a:hover {
+  background: #f3f4f6;
+  color: #d32f2f;
+}
+
+.admin-nav a.active {
+  background: #d32f2f;
+  color: #fff;
+  font-weight: 600;
+}
+
+.admin-nav a svg {
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+/* --- Layout --- */
+.admin-settings-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.admin-settings-content {
+  flex: 1;
+  margin-left: 240px;
+  padding: 30px;
+  background-color: #f9fafb;
+  transition: margin-left 0.3s ease;
+}
+
+/* --- Sidebar Overlay --- */
+.admin-settings-sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(17, 24, 39, 0.4);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 90;
+}
+
+.admin-settings-sidebar-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* --- Mobile Toggle Button --- */
+.admin-settings-mobile-menu-toggle {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  padding: 8px 10px;
+  border-radius: 6px;
+  z-index: 200; /* Ensures it’s above the sidebar and overlay */
+  display: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.admin-settings-mobile-menu-toggle:hover {
+  background: #f3f4f6;
+}
+
+/* --- Mobile Behavior --- */
+@media (max-width: 768px) {
+  .admin-sidebar {
+    left: -260px;
+  }
+
+  .admin-sidebar.open {
+    left: 0;
+  }
+
+  .admin-settings-content {
+    margin-left: 0;
+    padding: 20px;
+  }
+
+  .admin-settings-mobile-menu-toggle {
+    display: block;
+  }
+}
