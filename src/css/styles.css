@@ -794,6 +794,154 @@ body {
   margin-top: 20px;
 }
 
+  /* ===============================
+   Checkout Page Styles
+   =============================== */
+
+  /* For Lucide icons and text side by side */
+  .option-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  /* Group container for order type & payment method */
+  .option-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem; /* spacing between buttons */
+    flex-wrap: wrap; /* ensures responsiveness */
+    margin-top: 10px;
+  }
+
+  /* Option card design */
+  .option-card {
+    flex: 1 1 45%;
+    max-width: 250px;
+    text-align: center;
+    border: 2px solid #ddd;
+    border-radius: 16px;
+    padding: 16px 20px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .option-card:hover {
+    border-color: #007bff;
+    background-color: #f5faff;
+  }
+
+  /* Active state */
+  .option-card.active {
+    border-color: #0070f3;
+    background-color: #f0f8ff;
+    box-shadow: 0 6px 14px rgba(0, 112, 243, 0.2);
+  }
+
+  /* Hide default radio buttons */
+  .option-card input[type="radio"] {
+    display: none;
+  }
+
+  /* Make selected text slightly bold */
+  .option-card.active span {
+    font-weight: 600;
+  }
+
+
+    /* ===============================
+   Voucher Section (inline field)
+   =============================== */
+  .voucher-inline {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 15px;
+  }
+
+  .voucher-inline input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+  }
+
+  .voucher-btn {
+    background-color: #d32f2f; /* red */
+    color: #fff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.3s;
+  }
+
+  .voucher-btn:hover {
+    background-color: #b71c1c;
+  }
+
+  /* 1. Target the File Input Element */
+.checkout-field input[type="file"] {
+  /* Make the main input container act as the background/border for a uniform look */
+  background-color: #f7f7f7;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 0; /* Remove padding from the container */
+}
+
+/* 2. Target the button/label part of the input (The "Choose File" button) */
+
+/* Webkit (Chrome, Safari, newer Edge) */
+.checkout-field input[type="file"]::-webkit-file-upload-button {
+  /* Style the button */
+  background-color: var(--brand); /* Use your brand red */
+  color: #fff;
+  border: none;
+  padding: 10px 15px; /* Adjust padding to match other buttons */
+  margin-right: 15px; /* Space between button and filename text */
+  border-radius: 8px 0 0 8px; /* Round the left side, sharp edge inside */
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+/* Mozilla (Firefox) */
+.checkout-field input[type="file"]::file-selector-button {
+  /* This is the standardized name, used by modern Firefox/Chromium */
+  background-color: var(--brand);
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  margin-right: 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+/* 3. Hover Effect */
+.checkout-field input[type="file"]::-webkit-file-upload-button:hover,
+.checkout-field input[type="file"]::file-selector-button:hover {
+  background-color: #c41820; /* Darker red on hover */
+}
+
+/* 4. Text/Filename Area Styling (Optional cleanup) */
+/* The filename text will appear to the right of the button */
+.checkout-field input[type="file"] {
+    font-size: 15px;
+}
+
+
+
+
 /* Responsive Design - Updated */
 @media (max-width: 1024px) {
   .container {
@@ -911,99 +1059,6 @@ body {
   }
   .mobile-nav-overlay.active {
     display: block !important;
-  }
-
-  /* ===============================
-   Checkout Page Styles
-   =============================== */
-
-  /* For Lucide icons and text side by side */
-  .option-content {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-  }
-
-  /* Group container for order type & payment method */
-  .option-group {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem; /* spacing between buttons */
-    flex-wrap: wrap; /* ensures responsiveness */
-    margin-top: 10px;
-  }
-
-  /* Option card design */
-  .option-card {
-    flex: 1 1 45%;
-    max-width: 250px;
-    text-align: center;
-    border: 2px solid #ddd;
-    border-radius: 16px;
-    padding: 16px 20px;
-    background-color: #fff;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .option-card:hover {
-    border-color: #007bff;
-    background-color: #f5faff;
-  }
-
-  /* Active state */
-  .option-card.active {
-    border-color: #0070f3;
-    background-color: #f0f8ff;
-    box-shadow: 0 6px 14px rgba(0, 112, 243, 0.2);
-  }
-
-  /* Hide default radio buttons */
-  .option-card input[type="radio"] {
-    display: none;
-  }
-
-  /* Make selected text slightly bold */
-  .option-card.active span {
-    font-weight: 600;
-  }
-
-  /* ===============================
-   Voucher Section (inline field)
-   =============================== */
-  .voucher-inline {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 15px;
-  }
-
-  .voucher-inline input {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 15px;
-  }
-
-  .voucher-btn {
-    background-color: #d32f2f; /* red */
-    color: #fff;
-    border: none;
-    padding: 10px 18px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: background 0.3s;
-  }
-
-  .voucher-btn:hover {
-    background-color: #b71c1c;
   }
 
   /* ===============================
