@@ -106,7 +106,7 @@ const Landing = () => {
       try {
         // Fetch all products
         const res = await fetch(
-          "http://localhost:5000/api/admin/products/customer",
+          `${process.env.REACT_APP_API_URL_ADMIN}/products/customer`,
           {
             credentials: "include",
           }
@@ -115,9 +115,13 @@ const Landing = () => {
         const data = await res.json();
 
         // Fetch cart session
-        const cartRes = await fetch("http://localhost:5000/api/cart/get", {
-          credentials: "include",
-        });
+        const cartRes = await fetch(
+          `${process.env.REACT_APP_API_URL}/api/cart/get`,
+          {
+            credentials: "include",
+          }
+        );
+
         const cartData = cartRes.ok ? await cartRes.json() : { cart: [] };
 
         // Adjust stock based on cart reservations
