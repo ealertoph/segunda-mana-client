@@ -17,10 +17,6 @@ import "../../css/adminsidebar.css";
 
 const AccountSettings = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [changingPassword, setChangingPassword] = useState(false);
   const [adminInfo, setAdminInfo] = useState({
     fullName: "",
     email: "",
@@ -64,9 +60,12 @@ const AccountSettings = () => {
       if (!token) return;
 
       try {
-        const res = await fetch("http://localhost:5000/api/admin/auth/me", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await fetch(
+          `${process.env.REACT_APP_API_URL_ADMIN}/auth/me`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         if (!res.ok) throw new Error("Failed to fetch admin info");
         const data = await res.json();
 
@@ -79,9 +78,6 @@ const AccountSettings = () => {
           language: data.language || "English",
           timezone: data.timezone || "UTC-5 (Eastern Time)",
           notifications: data.notifications || "All notifications",
-          currentPassword: "",
-          newPassword: "",
-          confirmPassword: "",
         });
       } catch (err) {
         console.error(err);
@@ -93,37 +89,21 @@ const AccountSettings = () => {
 
   const handleSaveChanges = async () => {
     const token = sessionStorage.getItem("sg_admin_token");
-
-    const payload = { ...adminInfo };
-    if (
-      !adminInfo.currentPassword &&
-      !adminInfo.newPassword &&
-      !adminInfo.confirmPassword
-    ) {
-      delete payload.currentPassword;
-      delete payload.newPassword;
-      delete payload.confirmPassword;
-    }
-
     try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL_ADMIN}/auth/update`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(payload),
-      });
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL_ADMIN}/auth/update`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(adminInfo),
+        }
+      );
 
       if (!res.ok) throw new Error("Failed to update account");
       alert("Account updated successfully!");
-
-      setAdminInfo((prev) => ({
-        ...prev,
-        currentPassword: "",
-        newPassword: "",
-        confirmPassword: "",
-      }));
     } catch (err) {
       console.error(err);
       alert("Failed to update account. Check console for details.");
@@ -163,9 +143,22 @@ const AccountSettings = () => {
 
       <div className="admin-settings-layout">
         {/* Sidebar */}
+        <button
+          className="admin-settings-mobile-menu-toggle"
+          onClick={toggleSidebar}
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <path d="M3 6h18M3 12h18M3 18h18" />
+          </svg>
+        </button>
         <aside className={`admin-sidebar ${sidebarOpen ? "open" : ""}`}>
           <div className="admin-brand">
-            <div className="admin-logo"></div>
+            <img src={caritasLogo} alt="Caritas Logo" className="admin-logo" />
             <span className="admin-brand-text">
               <span>Segunda</span>
               <span>Mana</span>
@@ -247,6 +240,12 @@ const AccountSettings = () => {
             </NavLink>
           </nav>
         </aside>
+        <div
+          className={`admin-settings-sidebar-overlay ${
+            sidebarOpen ? "open" : ""
+          }`}
+          onClick={toggleSidebar}
+        />
 
         {/* Main Content */}
         <main className="admin-settings-content">
@@ -329,7 +328,6 @@ const AccountSettings = () => {
                   />
                 </div>
 
-
                 <div className="admin-settings-form-group">
                   <label className="admin-settings-form-label">Bio</label>
 
@@ -357,13 +355,6 @@ const AccountSettings = () => {
                     type="password"
                     className="admin-settings-form-input"
                     placeholder="Enter current password"
-                    value={adminInfo.currentPassword}
-                    onChange={(e) =>
-                      setAdminInfo({
-                        ...adminInfo,
-                        currentPassword: e.target.value,
-                      })
-                    }
                   />
                 </div>
 
@@ -375,13 +366,6 @@ const AccountSettings = () => {
                     type="password"
                     className="admin-settings-form-input"
                     placeholder="Enter new password"
-                    value={adminInfo.newPassword}
-                    onChange={(e) =>
-                      setAdminInfo({
-                        ...adminInfo,
-                        newPassword: e.target.value,
-                      })
-                    }
                   />
                 </div>
 
@@ -393,13 +377,6 @@ const AccountSettings = () => {
                     type="password"
                     className="admin-settings-form-input"
                     placeholder="Confirm new password"
-                    value={adminInfo.confirmPassword}
-                    onChange={(e) =>
-                      setAdminInfo({
-                        ...adminInfo,
-                        confirmPassword: e.target.value,
-                      })
-                    }
                   />
                 </div>
 
@@ -462,9 +439,13 @@ const AccountSettings = () => {
 
               {/* Actions */}
               <div className="admin-settings-actions">
-                <button className="admin-settings-btn admin-settings-btn-secondary">
+                <button
+                  className="admin-settings-btn admin-settings-btn-secondary"
+                  onClick={() => window.location.reload()}
+                >
                   Cancel
                 </button>
+
                 <button
                   className="admin-settings-btn admin-settings-btn-primary"
                   onClick={handleSaveChanges}
