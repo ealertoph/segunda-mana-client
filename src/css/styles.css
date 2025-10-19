@@ -5140,3 +5140,31 @@ a.btn-add {
   color: #333;
   background: transparent;
 }
+
+/* Responsive table container */
+.table {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px; /* Ensures proper layout before wrapping */
+}
+
+.table th,
+.table td {
+  padding: 12px 16px;
+  text-align: left;
+  white-space: nowrap; /* Keeps text on one line for small screens */
+}
+
+@media (max-width: 768px) {
+  .table th,
+  .table td {
+    font-size: 14px;
+    padding: 10px 12px;
+  }
+}
