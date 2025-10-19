@@ -5169,15 +5169,14 @@ a.btn-add {
   }
 }
 
-/* 🟦 FINAL FIX: Make hamburger small, top-right, not full width */
+/* 🟩 Force hamburger to float on top-right of the screen */
 .admin-settings-mobile-menu-toggle {
-  all: unset; /* Reset ALL inherited button styles */
-  position: fixed;
+  all: unset; /* reset any global styles */
+  position: fixed !important; /* stay on viewport, not inside layout */
   top: 16px;
-  right: 16px;
-  z-index: 2000;
-  background: white;
-  border: none;
+  right: 16px; /* absolutely pin to the right edge */
+  z-index: 3000; /* above everything */
+  background: #fff;
   border-radius: 50%;
   width: 44px;
   height: 44px;
@@ -5194,8 +5193,9 @@ a.btn-add {
   stroke: #333;
 }
 
+/* Only show on mobile screens */
 @media (min-width: 769px) {
   .admin-settings-mobile-menu-toggle {
-    display: none; /* hide on desktop */
+    display: none;
   }
 }
