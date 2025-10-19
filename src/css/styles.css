@@ -5169,22 +5169,32 @@ a.btn-add {
   }
 }
 
+/* ✅ Move admin mobile hamburger button to the top-right corner */
+.admin-settings-mobile-menu-toggle {
+  position: fixed;
+  top: 16px;
+  right: 16px; /* 🔹 Move to the right instead of left */
+  z-index: 2000; /* Ensures it's above sidebar & overlay */
+  background: white;
+  border: none;
+  padding: 8px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  display: none; /* hidden on desktop by default */
+}
+
+/* SVG icon size */
+.admin-settings-mobile-menu-toggle svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Show only on mobile screens */
 @media (max-width: 768px) {
-  .admin-settings-content {
-    padding: 12px;
-  }
-
-  .toolbar {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-  }
-
-  .toolbar .search input {
-    width: 100%;
-  }
-
-  .btn {
-    width: 100%;
+  .admin-settings-mobile-menu-toggle {
+    display: block;
   }
 }
+
+
