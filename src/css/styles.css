@@ -5172,19 +5172,23 @@ a.btn-add {
 /* 🟩 Force hamburger to float on top-right of the screen */
 .admin-settings-mobile-menu-toggle {
   all: unset; /* reset any global styles */
-  position: fixed !important; /* stay on viewport, not inside layout */
-  top: 16px;
-  right: 16px; /* absolutely pin to the right edge */
-  z-index: 3000; /* above everything */
-  background: #fff;
-  border-radius: 50%;
-  width: 44px;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  
+  /* --- POSITIONING FIX --- */
+  position: fixed !important; /* Keeps the button in the viewport, regardless of scroll */
+  top: 20px !important; /* Positions it 20px from the top edge */
+  right: 20px !important; /* ***THIS MOVES IT TO THE RIGHT SIDE (opposite of left)*** */
+  z-index: 10000 !important; /* Ensures it sits above ALL other elements, including the sidebar (which has a z-index of 1001) */
+  
+  /* Add back some essential visual styles for a fixed button */
+  background: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 18px;
   cursor: pointer;
+  color: #333;
+  padding: 8px 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
 .admin-settings-mobile-menu-toggle svg {
