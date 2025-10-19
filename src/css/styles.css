@@ -5168,3 +5168,23 @@ a.btn-add {
     padding: 10px 12px;
   }
 }
+
+@media (max-width: 768px) {
+  .admin-settings-content {
+    padding: 12px;
+  }
+
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .toolbar .search input {
+    width: 100%;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}
