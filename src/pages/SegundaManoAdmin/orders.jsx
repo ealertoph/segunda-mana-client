@@ -403,6 +403,7 @@ const OrderManagement = () => {
                       <ActionButtons
                         onView={() => handleView(o)}
                         onEdit={() => handleEdit(o)}
+                        onDelete={() => handleDelete(o)}
                       />
                     </td>
                   </tr>
