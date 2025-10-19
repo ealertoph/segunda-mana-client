@@ -51,7 +51,7 @@ const Inventory = () => {
     const fetchInventory = async () => {
       try {
         const token = sessionStorage.getItem("sg_admin_token");
-        const res = await fetch("http://localhost:5000/api/admin/inventory", {
+        const res = await fetch(`${process.env.REACT_APP_API_URL_ADMIN}/inventory`, {
           headers: {
             "Content-Type": "application/json",
             ...(token && { Authorization: `Bearer ${token}` }),
@@ -141,7 +141,7 @@ const Inventory = () => {
       const token = sessionStorage.getItem("sg_admin_token");
 
       const res = await fetch(
-        `http://localhost:5000/api/admin/inventory/${id}`,
+        `${process.env.REACT_APP_API_URL_ADMIN}/inventory/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -426,7 +426,7 @@ const Inventory = () => {
                         const token = sessionStorage.getItem("sg_admin_token");
 
                         const res = await fetch(
-                          `http://localhost:5000/api/admin/inventory/${editData._id}`,
+                          `${process.env.REACT_APP_API_URL_ADMIN}/inventory/${editData._id}`,
                           {
                             method: "PUT",
                             headers: {

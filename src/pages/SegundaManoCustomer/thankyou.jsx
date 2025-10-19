@@ -24,7 +24,9 @@ const ThankYou = () => {
 
   useEffect(() => {
     if (orderId) {
-      fetch(`http://localhost:5000/api/admin/orders/${orderId}`)
+      fetch(`${process.env.REACT_APP_API_URL_ADMIN}/orders/${orderId}`, {
+        credentials: "include",
+      })
         .then((res) => res.json())
         .then((data) => {
           if (data.success) {
@@ -37,6 +39,9 @@ const ThankYou = () => {
               code: voucherCode || data.order.code,
             });
           }
+        })
+        .catch((err) => {
+          console.error("Failed to fetch order details:", err);
         });
     }
   }, [orderId]);

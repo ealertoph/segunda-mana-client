@@ -48,10 +48,14 @@ export default function Checkout() {
     const fetchCart = async () => {
       // get cart
       try {
-        const res = await fetch(`http://localhost:5000/api/cart/get`, {
-          credentials: "include",
-        });
+        const res = await fetch(
+          `${process.env.REACT_APP_API_URL}/api/cart/get`,
+          {
+            credentials: "include",
+          }
+        );
         const data = await res.json();
+
         if (data.success) {
           setCartItems(data.cart);
         } else {
@@ -77,7 +81,7 @@ export default function Checkout() {
   );
   const total = subtotal - discount;
   const clearCart = async () => {
-    await fetch("http://localhost:5000/api/cart/clear", {
+    await fetch(`${process.env.REACT_APP_API_URL}/api/cart/clear`, {
       method: "POST",
       credentials: "include",
     });
@@ -123,10 +127,13 @@ export default function Checkout() {
     if (receiptFile) formData.append("proofOfPayment", receiptFile);
 
     try {
-      const res = await fetch("http://localhost:5000/api/admin/orders/order", {
-        method: "POST",
-        body: formData,
-      });
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/admin/orders/order`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       const data = await res.json();
 
@@ -172,7 +179,7 @@ export default function Checkout() {
     // otp submit
     try {
       const response = await fetch(
-        "http://localhost:5000/api/admin/orders/verify-otp",
+        `${process.env.REACT_APP_API_URL}/api/admin/orders/verify-otp`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

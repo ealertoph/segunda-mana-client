@@ -35,14 +35,22 @@ const Product = () => {
       try {
         // 1️⃣ Fetch product from backend
         const res = await fetch(
-          `http://localhost:5000/api/admin/products/${productId}`
+          `${process.env.REACT_APP_API_URL_ADMIN}/products/${productId}`,
+          {
+            credentials: "include",
+          }
         );
+        if (!res.ok) throw new Error("Failed to fetch product");
         const data = await res.json();
 
         // 2️⃣ Fetch user's cart session
-        const cartRes = await fetch("http://localhost:5000/api/cart/get", {
-          credentials: "include",
-        });
+        const cartRes = await fetch(
+          `${process.env.REACT_APP_API_URL}/api/cart/get`,
+          {
+            credentials: "include",
+          }
+        );
+        if (!cartRes.ok) throw new Error("Failed to fetch cart");
         const cartData = await cartRes.json();
 
         // 3️⃣ Check how many of this product are already in the cart
@@ -84,7 +92,7 @@ const Product = () => {
 
   const handleAddToCart = async (product) => {
     try {
-      const res = await fetch("http://localhost:5000/api/cart/add", {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/cart/add`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

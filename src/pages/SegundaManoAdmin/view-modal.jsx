@@ -11,7 +11,7 @@ const ViewModal = ({ data, onClose }) => {
         alert("You must be logged in as admin.");
         return;
       }
-      const res = await fetch(`http://localhost:5000/api/admin/orders/${data._id}/to-receive`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL_ADMIN}/orders/${data._id}/to-receive`, {
         method: "PUT",
         headers: { 
           "Content-Type": "application/json",

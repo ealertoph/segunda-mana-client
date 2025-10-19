@@ -46,7 +46,7 @@ const OrderManagement = () => {
     const fetchOrders = async () => {
       try {
         const token = sessionStorage.getItem("sg_admin_token");
-        const res = await fetch(`http://localhost:5000/api/admin/orders`, {
+        const res = await fetch(`${process.env.REACT_APP_API_URL_ADMIN}/orders`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
@@ -149,7 +149,7 @@ const OrderManagement = () => {
   const confirmDelete = async (id) => {
     try {
       const token = sessionStorage.getItem("sg_admin_token");
-      const res = await fetch(`http://localhost:5000/api/admin/orders/${id}`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL_ADMIN}/orders/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -196,7 +196,7 @@ const OrderManagement = () => {
 
   const updateStatus = async (id, action) => {
     const token = sessionStorage.getItem("sg_admin_token");
-    let url = `http://localhost:5000/api/admin/orders/${id}/${action}`;
+    let url = `${process.env.REACT_APP_API_URL_ADMIN}/orders/${id}/${action}`;
 
     try {
       const res = await fetch(url, {
@@ -469,7 +469,7 @@ const OrderManagement = () => {
 
                       try {
                         const token = sessionStorage.getItem("sg_admin_token");
-                        let url = `http://localhost:5000/api/admin/orders/${editData._id}`;
+                        let url = `${process.env.REACT_APP_API_URL_ADMIN}/orders/${editData._id}`;
 
                         if (
                           newStatus === "to receive" ||
@@ -531,7 +531,7 @@ const OrderManagement = () => {
                       try {
                         const token = sessionStorage.getItem("sg_admin_token");
                         const res = await fetch(
-                          `http://localhost:5000/api/admin/orders/${editData._id}`,
+                          `${process.env.REACT_APP_API_URL_ADMIN}/orders/${editData._id}`,
                           {
                             method: "PUT",
                             headers: {

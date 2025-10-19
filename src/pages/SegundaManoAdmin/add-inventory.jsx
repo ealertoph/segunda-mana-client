@@ -59,7 +59,7 @@ const AddInventory = () => {
     try {
       const token = sessionStorage.getItem("sg_admin_token");
       const response = await fetch(
-        `http://localhost:5000/api/admin/inventory/`,
+        `${process.env.REACT_APP_API_URL_ADMIN}/inventory`,
         {
           method: "POST",
           headers: {

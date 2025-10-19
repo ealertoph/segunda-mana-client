@@ -36,7 +36,7 @@ const ActivityLog = () => {
 
   useEffect(() => {
     console.log("activity");
-    fetch("http://localhost:5000/api/admin/activity", {
+    fetch(`${process.env.REACT_APP_API_URL_ADMIN}/activity`, {
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem("sg_admin_token")}`,
       },

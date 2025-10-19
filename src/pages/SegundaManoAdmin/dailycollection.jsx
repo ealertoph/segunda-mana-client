@@ -57,7 +57,7 @@ const DataCollection = () => {
 
   // Fetch available branches for dropdown
   useEffect(() => {
-    fetch("http://localhost:5000/api/admin/daily-collection")
+    fetch(`${process.env.REACT_APP_API_URL_ADMIN}/daily-collection`)
       .then((res) => res.json())
       .then((data) => setBranches(data.branches || []))
       .catch((err) => console.error(err));
@@ -118,7 +118,7 @@ const DataCollection = () => {
     };
 
     const res = await fetch(
-      "http://localhost:5000/api/admin/daily-collection",
+      `${process.env.REACT_APP_API_URL_ADMIN}/daily-collection`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -186,7 +186,7 @@ const DataCollection = () => {
       });
 
       const res = await fetch(
-        `http://localhost:5000/api/admin/daily-collection?${query}`
+        `${process.env.REACT_APP_API_URL_ADMIN}/daily-collection?${query}`
       );
       const data = await res.json();
       const records = data.records || [];

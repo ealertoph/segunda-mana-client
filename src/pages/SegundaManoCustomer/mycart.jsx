@@ -30,7 +30,7 @@ const MyCart = () => {
   }, []);
   const fetchCart = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/cart/get", {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/cart/get`, {
         credentials: "include",
       });
       const data = await res.json();
@@ -48,7 +48,7 @@ const MyCart = () => {
     try {
       // 🔹 Fetch random or fallback products
       let res = await fetch(
-        "http://localhost:5000/api/admin/products/random?limit=3",
+        `${process.env.REACT_APP_API_URL}/api/admin/products/random?limit=3`,
         {
           credentials: "include",
         }
@@ -58,7 +58,7 @@ const MyCart = () => {
       if (!Array.isArray(data) || data.length === 0) {
         // Fallback: fetch all products
         const allRes = await fetch(
-          "http://localhost:5000/api/admin/products/customer",
+          `${process.env.REACT_APP_API_URL}/api/admin/products/customer`,
           {
             credentials: "include",
           }
@@ -67,9 +67,12 @@ const MyCart = () => {
       }
 
       // 🔹 Fetch current cart session
-      const cartRes = await fetch("http://localhost:5000/api/cart/get", {
-        credentials: "include",
-      });
+      const cartRes = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/cart/get`,
+        {
+          credentials: "include",
+        }
+      );
       const cartData = cartRes.ok ? await cartRes.json() : { cart: [] };
 
       // 🔹 Adjust suggestions based on reserved quantities
@@ -104,12 +107,15 @@ const MyCart = () => {
 
   const handleRemoveFromCart = async (productId) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/cart/remove`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ productId }),
-      });
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/cart/remove`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ productId }),
+        }
+      );
 
       const data = await res.json();
       if (data.success) {

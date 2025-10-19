@@ -117,7 +117,7 @@ export default function Dashboard() {
 
       // Fetch products
       const productRes = await fetch(
-        "http://localhost:5000/api/admin/products",
+        `${process.env.REACT_APP_API_URL_ADMIN}/products`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -127,7 +127,7 @@ export default function Dashboard() {
 
       // Fetch inventory (or you can merge with products if same endpoint)
       const inventoryRes = await fetch(
-        "http://localhost:5000/api/admin/inventory",
+        `${process.env.REACT_APP_API_URL_ADMIN}/inventory`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -175,7 +175,7 @@ export default function Dashboard() {
   const fetchOrders = async () => {
     try {
       const token = sessionStorage.getItem("sg_admin_token");
-      const res = await fetch("http://localhost:5000/api/admin/orders", {
+      const res = await fetch(`${process.env.REACT_APP_API_URL_ADMIN}/orders`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();

@@ -50,7 +50,7 @@ const AdminProduct = () => {
     const fetchProducts = async () => {
       try {
         const token = sessionStorage.getItem("sg_admin_token");
-        const res = await fetch(`http://localhost:5000/api/admin/products`, {
+        const res = await fetch(`${process.env.REACT_APP_API_URL_ADMIN}/products`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 

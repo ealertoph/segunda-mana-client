@@ -81,15 +81,24 @@ const Shop = () => {
     const fetchData = async () => {
       try {
         // 1️⃣ Fetch products from backend
+        // 1️⃣ Fetch products from backend
         const res = await fetch(
-          "http://localhost:5000/api/admin/products/customer"
+          `${process.env.REACT_APP_API_URL_ADMIN}/products/customer`,
+          {
+            credentials: "include",
+          }
         );
+        if (!res.ok) throw new Error("Failed to fetch products");
         const data = await res.json();
 
         // 2️⃣ Fetch cart session
-        const cartRes = await fetch("http://localhost:5000/api/cart/get", {
-          credentials: "include",
-        });
+        const cartRes = await fetch(
+          `${process.env.REACT_APP_API_URL}/api/cart/get`,
+          {
+            credentials: "include",
+          }
+        );
+        if (!cartRes.ok) throw new Error("Failed to fetch cart");
         const cartData = cartRes.ok ? await cartRes.json() : { cart: [] };
 
         // 3️⃣ Adjust stock based on cart quantities
@@ -342,7 +351,7 @@ const Shop = () => {
                   height="16"
                   viewBox="0 0 24 24"
                   fill="none"
-                  stroke="#9aa4b2"
+                  stroke="#0d3266ff"
                   strokeWidth="2"
                 >
                   <circle cx="11" cy="11" r="8" />

@@ -76,7 +76,7 @@ const AddOrder = () => {
     const fetchProducts = async () => {
       try {
         const token = sessionStorage.getItem("sg_admin_token");
-        const res = await fetch("http://localhost:5000/api/admin/products", {
+        const res = await fetch(`${process.env.REACT_APP_API_URL_ADMIN}/products`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
@@ -146,7 +146,7 @@ const AddOrder = () => {
 
     try {
       const res = await fetch(
-        "http://localhost:5000/api/admin/orders/manual-order",
+        `${process.env.REACT_APP_API_URL_ADMIN}/orders/manual-order`,
         {
           method: "POST",
           headers: {

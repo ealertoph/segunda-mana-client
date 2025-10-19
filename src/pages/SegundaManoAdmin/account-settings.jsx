@@ -60,9 +60,12 @@ const AccountSettings = () => {
       if (!token) return;
 
       try {
-        const res = await fetch("http://localhost:5000/api/admin/auth/me", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await fetch(
+          `${process.env.REACT_APP_API_URL_ADMIN}/auth/me`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         if (!res.ok) throw new Error("Failed to fetch admin info");
         const data = await res.json();
 
@@ -87,14 +90,17 @@ const AccountSettings = () => {
   const handleSaveChanges = async () => {
     const token = sessionStorage.getItem("sg_admin_token");
     try {
-      const res = await fetch("http://localhost:5000/api/admin/auth/update", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(adminInfo),
-      });
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL_ADMIN}/auth/update`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(adminInfo),
+        }
+      );
 
       if (!res.ok) throw new Error("Failed to update account");
       alert("Account updated successfully!");
