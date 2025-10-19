@@ -16,13 +16,11 @@ import "../../css/styles.css";
 import "../../css/adminsidebar.css";
 
 const ActivityLog = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [rows, setRows] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 10;
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
   useEffect(() => {
     const handleResize = () => {
@@ -143,6 +141,19 @@ const ActivityLog = () => {
 
       <div className="admin-settings-layout">
         {/* Sidebar */}
+        <button
+          className="admin-settings-mobile-menu-toggle"
+          onClick={toggleSidebar}
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <path d="M3 6h18M3 12h18M3 18h18" />
+          </svg>
+        </button>
         <aside className={`admin-sidebar ${sidebarOpen ? "open" : ""}`}>
           <div className="admin-brand">
             <img src={caritasLogo} alt="Caritas Logo" className="admin-logo" />
@@ -227,6 +238,12 @@ const ActivityLog = () => {
             </NavLink>
           </nav>
         </aside>
+        <div
+          className={`admin-settings-sidebar-overlay ${
+            sidebarOpen ? "open" : ""
+          }`}
+          onClick={toggleSidebar}
+        />
 
         {/* Main content */}
         <main className="admin-settings-content">

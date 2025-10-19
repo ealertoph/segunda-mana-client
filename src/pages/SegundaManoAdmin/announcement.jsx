@@ -34,6 +34,8 @@ const Announcement = () => {
   const [success, setSuccess] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [announcementToDelete, setAnnouncementToDelete] = useState(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
   const editorRef = useRef(null);
 
@@ -242,7 +244,20 @@ const Announcement = () => {
   return (
     <div className="admin-layout">
       {/* Sidebar */}
-      <aside className="admin-sidebar">
+      <button
+        className="admin-settings-mobile-menu-toggle"
+        onClick={toggleSidebar}
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <path d="M3 6h18M3 12h18M3 18h18" />
+        </svg>
+      </button>
+      <aside className={`admin-sidebar ${sidebarOpen ? "open" : ""}`}>
         <div className="admin-brand">
           <img src={caritasLogo} alt="Caritas Logo" className="admin-logo" />
           <span className="admin-brand-text">
@@ -325,6 +340,12 @@ const Announcement = () => {
           </NavLink>
         </nav>
       </aside>
+      <div
+        className={`admin-settings-sidebar-overlay ${
+          sidebarOpen ? "open" : ""
+        }`}
+        onClick={toggleSidebar}
+      />
 
       {/* Content */}
       <div className="admin-content">
