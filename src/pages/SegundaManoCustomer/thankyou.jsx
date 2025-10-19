@@ -4,13 +4,19 @@ import { useLocation } from "react-router-dom";
 import caritasLogo from "../../assets/caritas_icon.jpg";
 import "../../css/styles.css";
 
+// 1. IMPORT THE PDF TEMPLATE (Adjust path as necessary)
+// The browser will fetch this file when the function is called.
+import certificateTemplateUrl from "../../assets/certificate/Segunda-Mana-Certificate-of-Donation.pdf"; 
+
+
 const ThankYou = () => {
   const [navActive, setNavActive] = useState(false);
   const [orderDetails, setOrderDetails] = useState(null);
   const location = useLocation();
   const { orderId, voucherCode } = location.state || {};
 
-  // prevent body scroll when mobile nav is active
+  // ... (Keep existing useEffect hooks for nav and order details) ...
+
   useEffect(() => {
     document.body.style.overflow = navActive ? "hidden" : "";
     const handleResize = () => {
@@ -37,6 +43,7 @@ const ThankYou = () => {
               address: data.order.address,
               impact: data.order.impact,
               code: voucherCode || data.order.code,
+              donorName: data.order.shippingAddress?.name || "Valued Donor", 
             });
           }
         })
@@ -45,6 +52,49 @@ const ThankYou = () => {
         });
     }
   }, [orderId]);
+  
+
+  const handleDownloadCertificate = async (e) => {
+    e.preventDefault(); 
+
+    if (!orderDetails) {
+      alert("Order details are not yet loaded.");
+      return;
+    }
+
+    try {
+        // 1. Fetch the static PDF template file
+        const response = await fetch(certificateTemplateUrl);
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch certificate template: ${response.statusText}`);
+        }
+        
+        // 2. Get the file data as a Blob
+        const blob = await response.blob();
+        
+        // 3. Create a URL for the Blob and trigger download
+        const fileURL = window.URL.createObjectURL(blob);
+        const tempLink = document.createElement('a');
+        tempLink.href = fileURL;
+        
+        // Dynamically name the file based on the order code
+        tempLink.setAttribute('download', `Donation-Certificate-${orderDetails.code}.pdf`); 
+        
+        document.body.appendChild(tempLink);
+        tempLink.click();
+        tempLink.remove();
+        
+        // 4. Clean up the URL object
+        window.URL.revokeObjectURL(fileURL);
+
+    } catch (error) {
+        console.error("Download Error:", error);
+        alert("An error occurred while trying to download the certificate.");
+    }
+  };
+
+
   return (
     <>
       {/* Header */}
@@ -73,10 +123,6 @@ const ThankYou = () => {
           </nav>
 
           <div className="header-tools">
-            {/*<div className="search">
-              <input placeholder="What are you looking for?" />
-              <span className="icon icon-search" aria-hidden="true"></span>
-            </div>*/}
             <Link to="/mycart" aria-label="My Cart">
               <span className="icon icon-cart" aria-hidden="true"></span>
             </Link>
@@ -148,7 +194,12 @@ const ThankYou = () => {
           )}
 
           <div className="thankyou-actions">
-            <a href="#" className="thankyou-btn primary">
+            {/* Button is wired to the new, simplified function */}
+            <a 
+              href="#" 
+              className="thankyou-btn primary"
+              onClick={handleDownloadCertificate}
+            >
               Download Certificate of Donation
             </a>
             <Link to="/shop" className="thankyou-btn secondary">
