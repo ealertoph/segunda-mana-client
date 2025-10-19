@@ -14,20 +14,17 @@ import {
 } from "lucide-react";
 import "../../css/styles.css";
 import "../../css/adminsidebar.css";
+import caritasLogo from "../../assets/caritas_icon.jpg";
 import ActionButtons from "./action-buttons";
 import ViewModal from "./view-modal";
-import caritasLogo from "../../assets/caritas_icon.jpg";
-
 
 const Inventory = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [viewData, setViewData] = useState(null);
   const [editData, setEditData] = useState(null);
-  const [toggleItem, setToggleItem] = useState(null);
+  const [deleteItem, setDeleteItem] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [filterStatus, setFilterStatus] = useState("all");
-
   const itemsPerPage = 10;
 
   const navigate = useNavigate();
@@ -74,19 +71,12 @@ const Inventory = () => {
 
   const filtered = inventory.filter((inv) => {
     const q = search.trim().toLowerCase();
-
-    if (q) {
-      const match =
-        inv.itemName.toLowerCase().includes(q) ||
-        inv.category.toLowerCase().includes(q) ||
-        inv.arRef.toLowerCase().includes(q);
-      if (!match) return false;
-    }
-
-    if (filterStatus === "active" && inv.isArchived) return false;
-    if (filterStatus === "archived" && !inv.isArchived) return false;
-
-    return true;
+    if (!q) return true;
+    return (
+      (inv.itemName || "").toLowerCase().includes(q) ||
+      (inv.category || "").toLowerCase().includes(q) ||
+      (inv.arRef || "").toLowerCase().includes(q)
+    );
   });
 
   const totalPages = Math.ceil(filtered.length / itemsPerPage);
@@ -116,7 +106,7 @@ const Inventory = () => {
       headers.join(","),
       ...filtered.map((inv) =>
         [
-          inv._id,
+          inv.id,
           inv.arRef,
           `"${inv.itemName}"`,
           inv.category,
@@ -144,37 +134,31 @@ const Inventory = () => {
 
   const handleView = (item) => setViewData(item);
   const handleEdit = (item) => setEditData(item);
-  const handleToggle = (item) => setToggleItem(item);
+  const handleDelete = (item) => setDeleteItem(item);
 
-  const confirmToggleArchive = async (id, isArchived) => {
+  const confirmDelete = async (id) => {
     try {
       const token = sessionStorage.getItem("sg_admin_token");
 
       const res = await fetch(
-        `${process.env.REACT_APP_API_URL_ADMIN}/inventory/${id}/archive?restore=${
-          isArchived ? "true" : "false"
-        }`,
+        `${process.env.REACT_APP_API_URL_ADMIN}/inventory/${id}`,
         {
-          method: "PUT",
+          method: "DELETE",
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
 
-      if (!res.ok) throw new Error("Failed to update Inventory");
+      if (!res.ok) throw new Error("Failed to delete product");
 
-      // Update UI
-      setInventory((prev) =>
-        prev.map((p) => (p._id === id ? { ...p, isArchived: !isArchived } : p))
-      );
-
-      setToggleItem(null);
-      alert(isArchived ? "Inventory restored!" : "Inventory archived!");
-      setFilterStatus("active"); 
+      // Remove from UI
+      setInventory((prev) => prev.filter((p) => p._id !== id));
+      setDeleteItem(null);
+      alert("Product deleted successfully!");
     } catch (err) {
-      console.error("Error archiving/restoring product:", err);
-      alert("Failed to update Inventory.");
+      console.error("Error deleting product:", err);
+      alert("Failed to delete product.");
     }
   };
 
@@ -210,7 +194,6 @@ const Inventory = () => {
               <span>Mana</span>
             </span>
           </div>
-
           <nav className="admin-nav">
             <div className="admin-section-title">GENERAL</div>
             <NavLink
@@ -309,15 +292,7 @@ const Inventory = () => {
                 onChange={(e) => setSearch(e.target.value)}
               />
             </div>
-            <select
-              className="btn"
-              value={filterStatus}
-              onChange={(e) => setFilterStatus(e.target.value)}
-            >
-              <option value="all">All</option>
-              <option value="active">Active</option>
-              <option value="archived">Archived</option>
-            </select>{" "}
+            {/*<button className="btn">Filter</button>*/}
             <button className="btn" onClick={exportCSV}>
               Export CSV
             </button>
@@ -344,11 +319,11 @@ const Inventory = () => {
               </thead>
               <tbody>
                 {displayedRows.map((inv) => (
-                  <tr key={inv._id}>
+                  <tr key={inv.id}>
                     <td>
                       <input type="checkbox" />
                     </td>
-                    <td>{inv._id}</td>
+                    <td>{inv.id}</td>
                     <td>{inv.arRef}</td>
                     <td>{inv.itemName}</td>
                     <td>{inv.category}</td>
@@ -360,7 +335,7 @@ const Inventory = () => {
                       <ActionButtons
                         onView={() => handleView(inv)}
                         onEdit={() => handleEdit(inv)}
-                        onDelete={() => handleToggle(inv)}
+                        onDelete={() => handleDelete(inv)}
                       />
                     </td>
                   </tr>
@@ -487,36 +462,28 @@ const Inventory = () => {
           )}
 
           {/* Delete Confirmation Modal */}
-          {toggleItem && (
+          {deleteItem && (
             <div className="modal-overlay">
               <div className="modal-box max-w-md text-center">
-                <h2 className="text-lg font-semibold mb-3">
-                  Confirm {toggleItem.isArchived ? "Restore" : "Archive"}
-                </h2>
+                <h2 className="text-lg font-semibold mb-3">Confirm Delete</h2>
                 <p>
-                  Are you sure you want to{" "}
-                  <strong>
-                    {toggleItem.isArchived ? "restore" : "archive"}
-                  </strong>{" "}
-                  (AR Ref: {toggleItem.arRef})?
+                  Are you sure you want to delete{" "}
+                  <strong>{deleteItem.itemName}</strong>
+                  (AR Ref: {deleteItem.arRef}
+                  )?
                 </p>
                 <div className="flex justify-center gap-3 mt-6">
                   <button
                     className="btn border"
-                    onClick={() => setToggleItem(null)}
+                    onClick={() => setDeleteItem(null)}
                   >
                     Cancel
                   </button>
                   <button
                     className="btn danger"
-                    onClick={() =>
-                      confirmToggleArchive(
-                        toggleItem._id,
-                        toggleItem.isArchived
-                      )
-                    }
+                    onClick={() => confirmDelete(deleteItem._id)}
                   >
-                    {toggleItem.isArchived ? "Restore" : "Archive"}
+                    Delete
                   </button>
                 </div>
               </div>
