@@ -5168,36 +5168,34 @@ a.btn-add {
     padding: 10px 12px;
   }
 }
-/* ✅ Fix hamburger button position and size */
+
+/* 🟦 FINAL FIX: Make hamburger small, top-right, not full width */
 .admin-settings-mobile-menu-toggle {
+  all: unset; /* Reset ALL inherited button styles */
   position: fixed;
   top: 16px;
-  right: 16px; /* place it on far right */
+  right: 16px;
   z-index: 2000;
   background: white;
   border: none;
-  border-radius: 8px;
-  padding: 8px;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   cursor: pointer;
-  display: none; /* hidden on desktop */
-  width: auto !important; /* prevent full-width buttons */
-  height: auto;
-  line-height: 0; /* removes extra vertical space */
 }
 
-/* SVG icon inside hamburger */
 .admin-settings-mobile-menu-toggle svg {
   width: 24px;
   height: 24px;
-  display: block;
+  stroke: #333;
 }
 
-/* Show only on mobile screens */
-@media (max-width: 768px) {
+@media (min-width: 769px) {
   .admin-settings-mobile-menu-toggle {
-    display: inline-flex; /* keep small, not stretched */
-    align-items: center;
-    justify-content: center;
+    display: none; /* hide on desktop */
   }
 }
